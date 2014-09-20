@@ -6,11 +6,25 @@ angular.module('starter.controllers', [])
 
 .controller('MapCtrl', function($scope, $q, $ionicLoading) {
 
+  $scope.initMapAutoSuggest = function () {
+    google.maps.event.addDomListener(window,"load", doGoogleSuggestInit )
+  }
+
+  function doGoogleSuggestInit() {
+    var source = document.getElementById('source');
+    var dest = document.getElementById('destination'); 
+    var options = {componentRestrictions: {country: 'in'} }
+    new google.maps.places.Autocomplete(source, options);
+    new google.maps.places.Autocomplete(dest, options);
+  }
+
+
   $scope.mapCreated = function(map) {
     $scope.map = map;
   };
 
   $scope.generateRoute = function () {
+    //debugger
     // needs refactor
     $scope.source = document.getElementById("source").value
     $scope.destination = document.getElementById("destination").value
@@ -41,7 +55,7 @@ angular.module('starter.controllers', [])
         travelMode: google.maps.TravelMode.DRIVING
       };
       directionsService.route(request, function(response, status) {
-        debugger
+        //debugger
         if (status == google.maps.DirectionsStatus.OK) {
           directionsDisplay.setDirections(response);
         } else {
